@@ -2,6 +2,8 @@
 { pkgs, ... }:
 
 {
+  services.hardware.openrgb.enable = true;
+
   programs.steam.enable = true;
 
   # CPU-Governor & Prioritäten während des Spielens (`gamemoderun %command%` in Steam)
