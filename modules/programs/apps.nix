@@ -11,5 +11,6 @@
     filezilla
     btop
     pavucontrol
+    kdePackages.kdenlive
   ];
 }
