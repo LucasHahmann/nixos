@@ -1,0 +1,37 @@
+{
+  // Basic editor settings
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  //
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  //
+  // Formatter settings
+  "editor.formatOnSave": true,
+  //
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
+  },
+  //
+  // Nixd language server
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nixd",
+  "nix.serverSettings": {
+    "nixd": {
+      "nixpkgs": {
+        "expr": "import <nixpkgs> { }"
+      },
+      "options": {
+        "nixos": {
+          "expr": "(import <nixpkgs/nixos> { configuration = /etc/nixos/configuration.nix; }).options"
+        }
+      },
+      "formatting": {
+        "command": [
+          "nixfmt"
+        ]
+      },
+    },
+  },
+}
