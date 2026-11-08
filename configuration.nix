@@ -15,6 +15,7 @@
     ./modules/system/networking.nix
     ./modules/system/filesystems.nix
     ./modules/system/maintenance.nix
+    ./modules/system/rebuild.nix
 
     # Hardware
     ./modules/hardware/amd-gpu.nix

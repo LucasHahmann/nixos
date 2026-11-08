@@ -1,0 +1,7 @@
+# Build-Ergebnisse von nix-build / nixos-rebuild build
+result
+result-*
+
+# Editor-Reste
+*.swp
+*~

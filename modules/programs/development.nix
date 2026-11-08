@@ -18,6 +18,7 @@
     vscodium
     claude-code
     python3
+    gh # GitHub-CLI: `gh auth login` richtet die Zugangsdaten für git push ein
 
     # Laufzeit für Claude-Code-Plugins
     nodejs # npx: context7, chrome-devtools-mcp

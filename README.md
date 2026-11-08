@@ -22,15 +22,18 @@ damit jedes Thema in seiner eigenen Datei liegt.
 
 ## Benutzung
 
-```bash
-# Konfiguration testen (aktiv bis zum nächsten Neustart, kein Bootmenü-Eintrag)
-sudo nixos-rebuild test
+Gebaut wird mit `rebuild` (siehe [`modules/system/rebuild.nix`](modules/system/rebuild.nix)).
+Der Befehl führt `nixos-rebuild` aus und committet und pusht die Config danach automatisch, aber nur, wenn der Build erfolgreich war.
 
-# Konfiguration übernehmen
-sudo nixos-rebuild switch
+```bash
+# Konfiguration testen (aktiv bis zum nächsten Neustart, kein Commit)
+rebuild test
+
+# Konfiguration übernehmen, committen und pushen
+rebuild "Beschreibung der Änderung"
 
 # System aktualisieren (Channel updaten + neu bauen)
-sudo nix-channel --update && sudo nixos-rebuild switch
+sudo nix-channel --update && rebuild "System-Update"
 
 # Speicher manuell freigeben (läuft sonst automatisch wöchentlich)
 sudo nix-collect-garbage --delete-older-than 14d
@@ -51,7 +54,8 @@ Wenn etwas schiefgeht: Neustart und im Bootmenü eine ältere Generation auswäh
     │   ├── locale.nix          Zeitzone, Sprache, Tastatur
     │   ├── networking.nix      NetworkManager, Firewall
     │   ├── filesystems.nix     NTFS-Laufwerke
-    │   └── maintenance.nix     fwupd, smartd
+    │   ├── maintenance.nix     fwupd, smartd
+    │   └── rebuild.nix         `rebuild`-Befehl (Build + Commit + Push)
     ├── hardware/               gerätespezifisch
     │   ├── amd-gpu.nix         CoreCtrl, Overclocking
     │   └── bluetooth.nix
