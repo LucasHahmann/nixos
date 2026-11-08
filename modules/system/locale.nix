@@ -1,5 +1,5 @@
 # Zeitzone, Sprache, Tastaturlayout
-{ ... }:
+{ pkgs, ... }:
 
 {
   time.timeZone = "Europe/Berlin";
@@ -23,4 +23,8 @@
     variant = "";
   };
   console.keyMap = "de";
+
+  fonts.packages = with pkgs; [
+    monocraft
+  ];
 }
