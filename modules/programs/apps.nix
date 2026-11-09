@@ -13,6 +13,8 @@
     pavucontrol
     kdePackages.kdenlive
     kdePackages.filelight
+    kdePackages.elisa
+    kdePackages.partitionmanager
     fastfetch
   ];
 }
