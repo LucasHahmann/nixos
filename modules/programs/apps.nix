@@ -13,5 +13,6 @@
     pavucontrol
     kdePackages.kdenlive
     kdePackages.filelight
+    fastfetch
   ];
 }
