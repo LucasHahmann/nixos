@@ -11,9 +11,14 @@
   # nie an den DNS-Server. Mit "~domain" gehen diese Domains an den DNS (AdGuard),
   # der sie weiterleitet (z.B. [/hahmann-trier.local/]172.16.10.1).
   services.resolved.settings.Resolve.Domains = [
-    "~hahmann-trier.local"
     "~deimelberg.local"
   ];
+
+  # hahmann-trier.local direkt beim DNS-Server dort fragen – unabhängig von AdGuard
+  services.resolved.dnsDelegates.hahmann-trier.Delegate = {
+    DNS = "172.16.10.1";
+    Domains = "~hahmann-trier.local";
+  };
 
   networking.nameservers = [
     "192.168.178.2"
