@@ -16,5 +16,6 @@
     kdePackages.elisa
     kdePackages.partitionmanager
     fastfetch
+    trash-cli
   ];
 }
