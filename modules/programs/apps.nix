@@ -12,5 +12,6 @@
     btop
     pavucontrol
     kdePackages.kdenlive
+    kdePackages.filelight
   ];
 }
