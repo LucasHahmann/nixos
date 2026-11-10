@@ -22,8 +22,18 @@ let
       "noatime"
     ];
   };
+  # Zusatzoptionen für die System-SSD (Intenso 112GB, btrfs).
+  # Werden mit den Optionen aus hardware-configuration.nix (subvol=…) zusammengeführt.
+  systemSsd = [
+    "compress=zstd" # spart viel Platz, v.a. in /nix/store
+    "noatime" # keine Schreibzugriffe nur fürs Lesen von Dateien
+  ];
 in
 {
+  fileSystems."/".options = systemSsd;
+  fileSystems."/home".options = systemSsd;
+  fileSystems."/nix".options = systemSsd;
+
   fileSystems."/mnt/windows-11" = ntfsMount "34CA9881CA984152"; # Lexar NM710 1TB (NVMe)
   fileSystems."/mnt/data" = ntfsMount "626E82406E820CCB"; # Samsung 840 EVO 250GB
 

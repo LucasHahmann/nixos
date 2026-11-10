@@ -39,11 +39,20 @@ let
         echo "==> Committet: $(git log -1 --format=%s)"
       fi
 
-      if git push --quiet; then
-        echo "==> Nach GitHub gepusht."
-      else
-        echo "==> Push fehlgeschlagen – später mit 'git push' in /etc/nixos nachholen." >&2
-      fi
+      # Direkt nach dem Switch lädt D-Bus neu – der Schlüsselbund (KWallet), aus dem
+      # gh das GitHub-Token holt, antwortet dann kurz nicht. Daher: nie nach Passwort
+      # fragen, sondern ein paar Sekunden warten und erneut versuchen.
+      export GIT_TERMINAL_PROMPT=0
+      for attempt in 1 2 3 4 5; do
+        if git push --quiet 2>/dev/null; then
+          echo "==> Nach GitHub gepusht."
+          exit 0
+        fi
+        echo "==> Push-Versuch $attempt fehlgeschlagen, neuer Versuch in 3 s …"
+        sleep 3
+      done
+      echo "==> Push fehlgeschlagen – später mit 'git push' in /etc/nixos nachholen." >&2
+      git push --quiet || true # letzter Versuch mit Fehlermeldung
     '';
   };
 in
