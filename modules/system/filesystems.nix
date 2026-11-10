@@ -34,7 +34,7 @@ in
   fileSystems."/home".options = systemSsd;
   fileSystems."/nix".options = systemSsd;
 
-  fileSystems."/mnt/windows-11" = ntfsMount "34CA9881CA984152"; # Lexar NM710 1TB (NVMe)
+  # fileSystems."/mnt/windows-11" = ntfsMount "34CA9881CA984152"; # Lexar NM710 1TB (NVMe)
   fileSystems."/mnt/data" = ntfsMount "626E82406E820CCB"; # Samsung 840 EVO 250GB
 
   # SanDisk 240GB – btrfs (Label "Games"), Steam-Bibliothek
