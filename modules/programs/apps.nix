@@ -17,5 +17,6 @@
     kdePackages.partitionmanager
     fastfetch
     trash-cli
+    btrfs-progs
   ];
 }
