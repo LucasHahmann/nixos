@@ -7,38 +7,49 @@
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
-  hardware.enableRedistributableFirmware = true;
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/ea35d0d1-c2e3-49df-a4d7-45653f346542";
+    { device = "/dev/disk/by-uuid/c4e24954-68e1-4b82-b88e-328d549d05d6";
       fsType = "btrfs";
+      options = [ "subvol=@" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/ea35d0d1-c2e3-49df-a4d7-45653f346542";
+    { device = "/dev/disk/by-uuid/c4e24954-68e1-4b82-b88e-328d549d05d6";
       fsType = "btrfs";
-      options = [ "subvol=home" ];
+      options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/ea35d0d1-c2e3-49df-a4d7-45653f346542";
+    { device = "/dev/disk/by-uuid/c4e24954-68e1-4b82-b88e-328d549d05d6";
       fsType = "btrfs";
-      options = [ "subvol=nix" ];
+      options = [ "subvol=@nix" ];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/c4e24954-68e1-4b82-b88e-328d549d05d6";
+      fsType = "btrfs";
+      options = [ "subvol=@log" ];
+    };
+
+  fileSystems."/.snapshots" =
+    { device = "/dev/disk/by-uuid/c4e24954-68e1-4b82-b88e-328d549d05d6";
+      fsType = "btrfs";
+      options = [ "subvol=@snapshots" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/64B7-0240";
+    { device = "/dev/disk/by-uuid/FEF8-C544";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/4a07a580-8dc1-4b5c-a56e-71c3e05c3b19"; }
-    ];
+  swapDevices = [];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

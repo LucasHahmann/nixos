@@ -1,11 +1,11 @@
-# Zusätzliche Laufwerke.
-# Root, /home, /nix, /boot und Swap stehen in hardware-configuration.nix.
+# Laufwerke nach dem Umzug auf die NVMe.
+# Ersetzt /etc/nixos/modules/system/filesystems.nix auf dem neuen System.
+#
+# Root, /home, /nix, /var/log, /.snapshots und /boot stehen in hardware-configuration.nix
+# (erzeugt von nixos-generate-config). Hier kommen nur die Zusatzoptionen dazu.
 #
 # Immer über UUID einbinden, nie über /dev/sdX – die Buchstaben können sich ändern.
 # UUIDs anzeigen: `lsblk -o NAME,FSTYPE,LABEL,UUID`
-#
-# NTFS: In Windows "Schnellstart" deaktivieren, sonst sind die
-# Partitionen beim Booten in Linux "dirty" und können beschädigt werden.
 { ... }:
 
 let
@@ -22,20 +22,28 @@ let
       "noatime"
     ];
   };
-  # Zusatzoptionen für die System-SSD (Intenso 112GB, btrfs).
-  # Werden mit den Optionen aus hardware-configuration.nix (subvol=…) zusammengeführt.
-  systemSsd = [
-    "compress=zstd" # spart viel Platz, v.a. in /nix/store
-    "noatime" # keine Schreibzugriffe nur fürs Lesen von Dateien
+
+  # Zusatzoptionen für die NVMe (btrfs). Werden mit den Optionen aus
+  # hardware-configuration.nix (subvol=@…) zusammengeführt.
+  # zstd:1 statt zstd:3: doppelt so schnelles Schreiben, nur ~8 % weniger Platzersparnis.
+  # Auf einer PCIe-4.0-NVMe wäre sonst die CPU der Engpass.
+  nvme = [
+    "compress=zstd:1"
+    "noatime"
   ];
 in
 {
-  fileSystems."/".options = systemSsd;
-  fileSystems."/home".options = systemSsd;
-  fileSystems."/nix".options = systemSsd;
+  fileSystems."/".options = nvme;
+  fileSystems."/home".options = nvme;
+  fileSystems."/nix".options = nvme;
+  fileSystems."/.snapshots".options = nvme;
+  fileSystems."/var/log" = {
+    options = nvme;
+    neededForBoot = true; # Logs schon ab dem frühen Boot sichern
+  };
 
-  # fileSystems."/mnt/windows-11" = ntfsMount "34CA9881CA984152"; # Lexar NM710 1TB (NVMe)
-  fileSystems."/mnt/data" = ntfsMount "626E82406E820CCB"; # Samsung 840 EVO 250GB
+  # Samsung 840 EVO 250GB – NTFS
+  fileSystems."/mnt/data" = ntfsMount "626E82406E820CCB";
 
   # SanDisk 240GB – btrfs (Label "Games"), Steam-Bibliothek
   fileSystems."/mnt/games" = {
@@ -45,9 +53,20 @@ in
       "nofail"
       "x-systemd.device-timeout=5s"
       "noatime"
-      "compress=zstd" # spart Platz; bereits komprimierte Spieldateien werden automatisch übersprungen
+      "compress=zstd" # SATA-SSD: hier ist die SSD der Engpass, zstd:3 passt
     ];
   };
-  # btrfs kennt kein uid=/gid= wie NTFS. Der Besitzer wird im Dateisystem gespeichert,
-  # daher einmalig nach dem Formatieren: sudo chown lhahmann:users /mnt/games
+
+  # Komprimierter Swap im RAM statt Swap-Partition
+  zramSwap.enable = true;
+
+  # Monatliche Prüfung aller btrfs-Daten auf Bitfehler
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
+    fileSystems = [
+      "/"
+      "/mnt/games"
+    ];
+  };
 }
