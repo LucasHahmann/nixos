@@ -4,7 +4,8 @@
 {
   programs.vim.enable = true;
 
-  virtualisation.docker.enable = false;
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "btrfs";
 
   programs.git = {
     enable = true;
