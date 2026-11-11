@@ -26,5 +26,6 @@
 
   fonts.packages = with pkgs; [
     monocraft
+    cinzel
   ];
 }
