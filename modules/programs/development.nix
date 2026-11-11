@@ -4,6 +4,8 @@
 {
   programs.vim.enable = true;
 
+  virtualisation.docker.enable = false;
+
   programs.git = {
     enable = true;
     config = {
