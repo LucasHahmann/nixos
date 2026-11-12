@@ -31,6 +31,7 @@
     ./modules/programs/development.nix
     ./modules/programs/gaming.nix
     ./modules/programs/streaming.nix
+    ./modules/programs/citrix-workspace.nix
 
     # Benutzer
     ./modules/users/lhahmann.nix
