@@ -26,6 +26,8 @@ in
     fastfetch
     trash-cli
     btrfs-progs
+    thunderbird
+    pika-backup
     unstable.photocraft # Bildbearbeitung (PSD), github.com/storytold/photocraft
   ];
 }
