@@ -28,6 +28,7 @@ in
     btrfs-progs
     thunderbird
     pika-backup
+    siril
     unstable.photocraft # Bildbearbeitung (PSD), github.com/storytold/photocraft
   ];
 }
